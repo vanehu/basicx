@@ -1,0 +1,9 @@
+Library: CPPFormatLibrary
+Version: 0.1.0
+License: None
+Website: https://github.com/sczybt/CPPFormatLibrary
+
+Library: pugixml
+Version: 1.8.1
+License: MIT
+Website: https://github.com/zeux/pugixml
