@@ -1,0 +1,1 @@
+- 01、2018-02-04: add bmt of log_libs_test
