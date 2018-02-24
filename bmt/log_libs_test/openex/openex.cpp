@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2018-2018
  * Xu Rendong <xurendong@outlook.com>
  * All rights reserved.
