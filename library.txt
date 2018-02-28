@@ -18,3 +18,13 @@ Library: jsoncpp
 Version: 1.8.4
 License: MIT
 Website: https://github.com/open-source-parsers/jsoncpp
+
+Library: mysql-connector-c
+Version: 6.1.11
+License: GPL
+Website: https://dev.mysql.com/downloads/connector/c/
+
+Library: otlv4
+Version: 4.0.420
+License: BSD
+Website: http://otl.sourceforge.net
