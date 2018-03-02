@@ -19,7 +19,7 @@ Version: 1.8.4
 License: MIT
 Website: https://github.com/open-source-parsers/jsoncpp
 
-Library: mysql-connector-c
+Library: mysql-connector-c (will remove in closed source version)
 Version: 6.1.11
 License: GPL
 Website: https://dev.mysql.com/downloads/connector/c/
