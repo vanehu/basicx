@@ -1,8 +1,18 @@
 
+Library: CMake
+Version: 3.9.4
+License: BSD
+Website: https://cmake.org
+
 Library: gperftools
 Version: 2.6.3
 License: BSD
 Website: https://github.com/gperftools/gperftools
+
+Library: Boost
+Version: 1.65.1
+License: Boost
+Website: http://www.boost.org
 
 Library: CPPFormatLibrary
 Version: 0.1.0
@@ -19,7 +29,7 @@ Version: 1.8.4
 License: MIT
 Website: https://github.com/open-source-parsers/jsoncpp
 
-Library: mysql-connector-c (will remove in closed source version)
+Library: mysql-connector-c (will be removed)
 Version: 6.1.11
 License: GPL
 Website: https://dev.mysql.com/downloads/connector/c/
