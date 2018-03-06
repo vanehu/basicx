@@ -29,10 +29,10 @@ Version: 1.8.4
 License: MIT
 Website: https://github.com/open-source-parsers/jsoncpp
 
-Library: mysql-connector-c (will be removed)
-Version: 6.1.11
-License: GPL
-Website: https://dev.mysql.com/downloads/connector/c/
+Library: MariaDB Connector/C
+Version: 3.0.3
+License: LGPL
+Website: https://downloads.mariadb.org/connector-c
 
 Library: otlv4
 Version: 4.0.420
