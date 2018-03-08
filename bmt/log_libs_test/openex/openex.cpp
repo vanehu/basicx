@@ -4,7 +4,8 @@
  *
  * The project sponsor and lead author is Xu Rendong.
  * E-mail: xrd@ustc.edu, QQ: 277195007, WeChat: ustc_xrd
- * See the contributors file for names of other contributors.
+ * You can get more information at https://xurendong.github.io
+ * For names of other contributors see the contributors file.
  *
  * Commercial use of this code in source and binary forms is
  * governed by a LGPL v3 license. You may get a copy from the
@@ -16,7 +17,7 @@
  * get a copy from the root directory. Certainly welcome you
  * to contribute code of all sorts.
  *
- * Be sure to retain the above copyright notice and conditions.
+ * Be sure to retain the above copyright notices and conditions.
  */
 
 #include <ctime>
