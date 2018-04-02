@@ -135,7 +135,7 @@ namespace basicx {
 		void SetActiveSync( bool active_sync ); // 默认 false
 		void SetWorkThreads( size_t work_threads ); // 默认 1
 		void SetInitCapacity( uint32_t init_capacity ); // 默认 8192
-		void SetFileStreamBuffer( int32_t mode, size_t size = 0 ); // 会影响性能，但在静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
+		void SetFileStreamBuffer( int32_t mode, size_t size = 0 ); // 静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
 		void InitSysLog( std::string app_name, std::string app_version, std::string app_company, std::string app_copyright ); // 设置好参数后再调用
 		void PrintSysInfo();
 		void WriteSysInfo();

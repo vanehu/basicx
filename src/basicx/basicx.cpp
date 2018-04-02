@@ -64,7 +64,7 @@ int main( int argc, char* argv[] ) {
 	//syslog_s->SetActiveFlush( false );
 	//syslog_s->SetActiveSync( false );
 	//syslog_s->SetWorkThreads( 1 );
-	////syslog_s->SetFileStreamBuffer( DEF_SYSLOG_FSBM_NONE ); // 会影响性能，但在静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
+	////syslog_s->SetFileStreamBuffer( DEF_SYSLOG_FSBM_NONE ); // 静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
 	//syslog_s->InitSysLog( DEF_APP_NAME, DEF_APP_VERSION, DEF_APP_COMPANY, DEF_APP_COPYRIGHT ); // 设置好参数后
 	//syslog_s->PrintSysInfo();
 	//syslog_s->WriteSysInfo();

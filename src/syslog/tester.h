@@ -43,7 +43,7 @@ namespace basicx {
 		//syslog_s->SetActiveFlush( false );
 		//syslog_s->SetActiveSync( false );
 		//syslog_s->SetWorkThreads( 2 );
-		//syslog_s->SetFileStreamBuffer( DEF_SYSLOG_FSBM_LINE, 4096 ); // 会影响性能，但在静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
+		//syslog_s->SetFileStreamBuffer( DEF_SYSLOG_FSBM_LINE, 4096 ); // 静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
 		syslog_s->InitSysLog( DEF_APP_NAME, DEF_APP_VERSION, DEF_APP_COMPANY, DEF_APP_COPYRIGHT ); // 设置好参数后
 		syslog_s->PrintSysInfo();
 		syslog_s->LogPrint( syslog_level::n_debug, log_cate, log_info );
@@ -66,7 +66,7 @@ namespace basicx {
 		syslog_d->SetActiveFlush( false );
 		syslog_d->SetActiveSync( false );
 		syslog_d->SetWorkThreads( 2 );
-		//syslog_d->SetFileStreamBuffer( DEF_SYSLOG_FSBM_LINE, 4096 ); // 会影响性能，但在静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
+		//syslog_d->SetFileStreamBuffer( DEF_SYSLOG_FSBM_LINE, 4096 ); // 静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
 		syslog_d->InitSysLog( DEF_APP_NAME, DEF_APP_VERSION, DEF_APP_COMPANY, DEF_APP_COPYRIGHT ); // 设置好参数后
 		syslog_d->WriteSysInfo();
 		syslog_d->LogWrite( syslog_level::n_debug, log_cate, log_info );
