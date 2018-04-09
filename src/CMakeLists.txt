@@ -294,6 +294,7 @@ IF (WIN32)
 		      "${PROJECT_SOURCE_DIR}/common/compile.h" 
 		      "${PROJECT_SOURCE_DIR}/common/define.h" 
 			  "${PROJECT_SOURCE_DIR}/common/sysdef.h" 
+			  "${PROJECT_SOURCE_DIR}/common/winver.h" 
 	    DESTINATION "${CMAKE_INSTALL_PREFIX}/${PATH_FLAG_PLATFORM}/include/common"
 	)
     INSTALL (
@@ -419,6 +420,7 @@ ELSEIF ((UNIX) OR (APPLE))
 		      "${PROJECT_SOURCE_DIR}/common/compile.h" 
 		      "${PROJECT_SOURCE_DIR}/common/define.h" 
 			  "${PROJECT_SOURCE_DIR}/common/sysdef.h" 
+			  "${PROJECT_SOURCE_DIR}/common/winver.h" 
 	    DESTINATION "${CMAKE_INSTALL_PREFIX}/${PATH_FLAG_PLATFORM}/include/common" 
 		# PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ # 644
 	)

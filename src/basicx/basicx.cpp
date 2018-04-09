@@ -25,6 +25,7 @@
 #include <common/define.h>
 #include <common/sysdef.h>
 #include <common/assist.h>
+#include <common/winver.h>
 //#include <common/common.h>
 //#include <timers/timers.h>
 //#include <syslog/syslog.h>
