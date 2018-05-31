@@ -73,6 +73,10 @@ namespace basicx {
 		Plugins_X* GetPluginsX( const std::string& plugin_name ) const;
 		void SetPluginsX( const std::string& plugin_name, Plugins_X* plugins_x );
 
+		std::string GetPluginLocationByName( const std::string& plugin_name ) const;
+		std::string GetPluginCfgFilePathByName( const std::string& plugin_name ) const;
+		std::string GetPluginInfoFilePathByName( const std::string& plugin_name ) const;
+
 	private:
 		Plugins_P* m_plugins_p;
 		static Plugins* m_instance;

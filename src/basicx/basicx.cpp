@@ -28,7 +28,7 @@
 #include <common/winver.h>
 //#include <common/common.h>
 //#include <timers/timers.h>
-//#include <syslog/syslog.h>
+#include <syslog/syslog.h>
 //#include <syscfg/syscfg.h>
 //#include <sysrtm/sysrtm.h>
 //#include <sysdbi_m/sysdbi_m.h>
@@ -58,17 +58,17 @@ int main( int argc, char* argv[] ) {
 	//basicx::Test_SysLog();
 
 	// for network、plugins、sysdbi_m、sysdbi_s test
-	//basicx::SysLog_S g_syslog_s( "BasicX" );
-	//basicx::SysLog_S* syslog_s = basicx::SysLog_S::GetInstance();
-	//syslog_s->SetThreadSafe( false );
-	//syslog_s->SetLocalCache( true );
-	//syslog_s->SetActiveFlush( false );
-	//syslog_s->SetActiveSync( false );
-	//syslog_s->SetWorkThreads( 1 );
+	basicx::SysLog_S g_syslog_s( "BasicX" );
+	basicx::SysLog_S* syslog_s = basicx::SysLog_S::GetInstance();
+	syslog_s->SetThreadSafe( false );
+	syslog_s->SetLocalCache( true );
+	syslog_s->SetActiveFlush( false );
+	syslog_s->SetActiveSync( false );
+	syslog_s->SetWorkThreads( 1 );
 	////syslog_s->SetFileStreamBuffer( DEF_SYSLOG_FSBM_NONE ); // 静态链接 MySQL、MariaDB 时需要设为 无缓冲 不然写入文件的日志会被缓存
-	//syslog_s->InitSysLog( DEF_APP_NAME, DEF_APP_VERSION, DEF_APP_COMPANY, DEF_APP_COPYRIGHT ); // 设置好参数后
-	//syslog_s->PrintSysInfo();
-	//syslog_s->WriteSysInfo();
+	syslog_s->InitSysLog( DEF_APP_NAME, DEF_APP_VERSION, DEF_APP_COMPANY, DEF_APP_COPYRIGHT ); // 设置好参数后
+	syslog_s->PrintSysInfo();
+	syslog_s->WriteSysInfo();
 
 	//basicx::SysDBI_M g_sysdbi_m;
 	//basicx::Test_SysDBI_M();

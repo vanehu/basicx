@@ -24,9 +24,9 @@
 #define PLUGIN_TEST_1_DEFINE_H
 
 // 插件定义
-#define PLUGIN_NAME_PLUGIN_TEST_1 "plugin_test_1" // 插件名称
-#define PLUGIN_NAME_CN_PLUGIN_TEST_1 "用 户 插 件 测 试 - 1" // 插件中文名称
-#define PLUGIN_VERSION_PLUGIN_TEST_1 "V0.1.0-Beta Build 20180222" // 插件版本号
+#define PLUGIN_NAME "plugin_test_1" // 插件名称
+#define PLUGIN_NAME_CN "用 户 插 件 测 试 - 1" // 插件中文名称
+#define PLUGIN_VERSION "V0.1.0-Beta Build 20180531" // 插件版本号
 
 // 插件自定义消息
 

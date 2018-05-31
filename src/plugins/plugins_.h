@@ -90,6 +90,10 @@ namespace basicx {
 		Plugins_X* GetPluginsX( const std::string& plugin_name );
 		void SetPluginsX( const std::string& plugin_name, Plugins_X* plugins_x );
 
+		std::string GetPluginLocationByName( const std::string& plugin_name );
+		std::string GetPluginCfgFilePathByName( const std::string& plugin_name );
+		std::string GetPluginInfoFilePathByName( const std::string& plugin_name );
+
 		//void AddUserTaskSend( int32_t task_type, std::string& task_info, std::string& task_data = std::string( "" ) );
 		void OnDeliverTask( int32_t task_id, std::string node_type, int32_t identity, int32_t code, std::string& data );
 		void CommitResult( int32_t task_id, int32_t identity, int32_t code, std::string& data );

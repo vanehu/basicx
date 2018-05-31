@@ -27,13 +27,13 @@
 
 #include <plugins/plugins.h>
 
-class plugin_test_2_P;
+class Plugin_Test_2_P;
 
-class BASICX_PLUGINS_X_EXPIMP plugin_test_2 : public basicx::Plugins_X
+class BASICX_PLUGINS_X_EXPIMP Plugin_Test_2 : public basicx::Plugins_X
 {
 public:
-	plugin_test_2();
-	~plugin_test_2();
+	Plugin_Test_2();
+	~Plugin_Test_2();
 
 public:
 	virtual bool Initialize();
@@ -46,7 +46,7 @@ public:
 	virtual bool AssignTask( int32_t task_id, int32_t identity, int32_t code, std::string& data );
 
 private:
-	plugin_test_2_P* m_strate_test_2_p;
+	Plugin_Test_2_P* m_plugin_test_2_p;
 
 	// 自定义成员函数和变量
 

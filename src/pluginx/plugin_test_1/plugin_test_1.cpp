@@ -20,134 +20,134 @@
 * Be sure to retain the above copyright notice and conditions.
 */
 
+#include "define.h"
 #include "plugin_test_1.h"
-#include "plugin_test_1_P.h"
+#include "plugin_test_1_.h"
 
-plugin_test_1 g_plugin; // 必须
+Plugin_Test_1 g_plugin; // 必须
 
-// 预设 plugin_test_1_P 函数实现
+// 预设 Plugin_Test_1_P 函数实现
 
-plugin_test_1_P::plugin_test_1_P()
-	: m_log_cate( "<PLUGIN_TEST_1>" ) {
-	//m_strLocation = "";
-	//m_strInfFilePath = "";
-	//m_strCfgFilePath = "";
-
+Plugin_Test_1_P::Plugin_Test_1_P()
+	: m_log_cate( "<PLUGIN_TEST_1>" )
+	, m_location( "" )
+	, m_cfg_file_path( "" )
+	, m_info_file_path( "" ) {
 	m_syslog = basicx::SysLog_S::GetInstance();
 }
 
-plugin_test_1_P::~plugin_test_1_P() {
+Plugin_Test_1_P::~Plugin_Test_1_P() {
 }
 
-void plugin_test_1_P::SetGlobalPath() {
-	//m_pStrateInfo = m_pStrateCenter->FindStrateInfoByName( "plugin_test_1" ); // 就当做肯定可以获得了
-	//if( m_pStrateInfo )
-	//{
-	//	m_strLocation = m_pStrateInfo->GetLocation();
-	//	m_strInfFilePath = m_pStrateInfo->GetInfoFilePath();
-	//	m_strCfgFilePath = m_pStrateInfo->GetCfgFilePath();
-	//}
+void Plugin_Test_1_P::SetGlobalPath() {
+	basicx::Plugins* plugins = basicx::Plugins::GetInstance();
+	m_location = plugins->GetPluginLocationByName( PLUGIN_NAME );
+	m_cfg_file_path = plugins->GetPluginCfgFilePathByName( PLUGIN_NAME );
+	m_info_file_path = plugins->GetPluginInfoFilePathByName( PLUGIN_NAME );
+	m_syslog->LogPrint( basicx::syslog_level::c_debug, m_log_cate, m_location );
+	m_syslog->LogPrint( basicx::syslog_level::c_debug, m_log_cate, m_cfg_file_path );
+	m_syslog->LogPrint( basicx::syslog_level::c_debug, m_log_cate, m_info_file_path );
 }
 
-bool plugin_test_1_P::Initialize() {
+bool Plugin_Test_1_P::Initialize() {
 	SetGlobalPath();
 	std::string log_info = "Initialize";
 	m_syslog->LogPrint( basicx::syslog_level::c_hint, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::InitializeExt( plugin_test_1* strate_test ) {
+bool Plugin_Test_1_P::InitializeExt() {
 	std::string log_info = "InitializeExt";
 	m_syslog->LogPrint( basicx::syslog_level::c_hint, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::StartPlugin( plugin_test_1* strate_test ) {
+bool Plugin_Test_1_P::StartPlugin() {
 	std::string log_info = "StartPlugin";
 	m_syslog->LogPrint( basicx::syslog_level::c_info, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::IsPluginRun( plugin_test_1* strate_test ) {
+bool Plugin_Test_1_P::IsPluginRun() {
 	std::string log_info = "IsPluginRun";
 	m_syslog->LogPrint( basicx::syslog_level::c_info, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::StopPlugin( plugin_test_1* strate_test ) {
+bool Plugin_Test_1_P::StopPlugin() {
 	std::string log_info = "StopPlugin";
 	m_syslog->LogPrint( basicx::syslog_level::c_info, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::UninitializeExt( plugin_test_1* strate_test ) {
+bool Plugin_Test_1_P::UninitializeExt() {
 	std::string log_info = "UninitializeExt";
 	m_syslog->LogPrint( basicx::syslog_level::c_warn, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::Uninitialize() {
+bool Plugin_Test_1_P::Uninitialize() {
 	std::string log_info = "Uninitialize";
 	m_syslog->LogPrint( basicx::syslog_level::c_warn, m_log_cate, log_info );
 	return true;
 }
 
-bool plugin_test_1_P::AssignTask( int32_t task_id, int32_t identity, int32_t code, std::string& data ) {
+bool Plugin_Test_1_P::AssignTask( int32_t task_id, int32_t identity, int32_t code, std::string& data ) {
 	std::string log_info = "AssignTask";
 	m_syslog->LogPrint( basicx::syslog_level::c_info, m_log_cate, log_info );
 	return true;
 }
 
-// 自定义 plugin_test_1_P 函数实现
+// 自定义 Plugin_Test_1_P 函数实现
 
-// 预设 plugin_test_1 函数实现
+// 预设 Plugin_Test_1 函数实现
 
-plugin_test_1::plugin_test_1()
-	: basicx::Plugins_X( "plugin_test_1" )
-	, m_strate_test_1_p( nullptr ) {
+Plugin_Test_1::Plugin_Test_1()
+	: basicx::Plugins_X( PLUGIN_NAME )
+	, m_plugin_test_1_p( nullptr ) {
 	try {
-		m_strate_test_1_p = new plugin_test_1_P();
+		m_plugin_test_1_p = new Plugin_Test_1_P();
 	}
 	catch( ... ) {}
 }
 
-plugin_test_1::~plugin_test_1() {
-	if( m_strate_test_1_p != nullptr ) {
-		delete m_strate_test_1_p;
-		m_strate_test_1_p = nullptr;
+Plugin_Test_1::~Plugin_Test_1() {
+	if( m_plugin_test_1_p != nullptr ) {
+		delete m_plugin_test_1_p;
+		m_plugin_test_1_p = nullptr;
 	}
 }
 
-bool plugin_test_1::Initialize() {
-	return m_strate_test_1_p->Initialize();
+bool Plugin_Test_1::Initialize() {
+	return m_plugin_test_1_p->Initialize();
 }
 
-bool plugin_test_1::InitializeExt() {
-	return m_strate_test_1_p->InitializeExt( this );
+bool Plugin_Test_1::InitializeExt() {
+	return m_plugin_test_1_p->InitializeExt();
 }
 
-bool plugin_test_1::StartPlugin() {
-	return m_strate_test_1_p->StartPlugin( this );
+bool Plugin_Test_1::StartPlugin() {
+	return m_plugin_test_1_p->StartPlugin();
 }
 
-bool plugin_test_1::IsPluginRun() {
-	return m_strate_test_1_p->IsPluginRun( this );
+bool Plugin_Test_1::IsPluginRun() {
+	return m_plugin_test_1_p->IsPluginRun();
 }
 
-bool plugin_test_1::StopPlugin() {
-	return m_strate_test_1_p->StopPlugin( this );
+bool Plugin_Test_1::StopPlugin() {
+	return m_plugin_test_1_p->StopPlugin();
 }
 
-bool plugin_test_1::UninitializeExt() {
-	return m_strate_test_1_p->UninitializeExt( this );
+bool Plugin_Test_1::UninitializeExt() {
+	return m_plugin_test_1_p->UninitializeExt();
 }
 
-bool plugin_test_1::Uninitialize() {
-	return m_strate_test_1_p->Uninitialize();
+bool Plugin_Test_1::Uninitialize() {
+	return m_plugin_test_1_p->Uninitialize();
 }
 
-bool plugin_test_1::AssignTask( int32_t task_id, int32_t identity, int32_t code, std::string& data ) {
-	return m_strate_test_1_p->AssignTask( task_id, identity, code, data );
+bool Plugin_Test_1::AssignTask( int32_t task_id, int32_t identity, int32_t code, std::string& data ) {
+	return m_plugin_test_1_p->AssignTask( task_id, identity, code, data );
 }
 
-// 自定义 plugin_test_1 函数实现
+// 自定义 Plugin_Test_1 函数实现

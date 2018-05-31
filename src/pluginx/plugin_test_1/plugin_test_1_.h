@@ -20,31 +20,34 @@
 * Be sure to retain the above copyright notice and conditions.
 */
 
-#ifndef PLUGIN_TEST_2_PLUGIN_TEST_2_P_H
-#define PLUGIN_TEST_2_PLUGIN_TEST_2_P_H
-
-#include "plugin_test_2.h"
+#ifndef PLUGIN_TEST_1_PLUGIN_TEST_1_P_H
+#define PLUGIN_TEST_1_PLUGIN_TEST_1_P_H
 
 #include <syslog/syslog.h>
 
-class plugin_test_2_P
+class Plugin_Test_1_P
 {
 public:
-	plugin_test_2_P();
-	~plugin_test_2_P();
+	Plugin_Test_1_P();
+	~Plugin_Test_1_P();
 
 public:
 	void SetGlobalPath();
 
 public:
 	bool Initialize();
-	bool InitializeExt( plugin_test_2* strate_test );
-	bool StartPlugin( plugin_test_2* strate_test );
-	bool IsPluginRun( plugin_test_2* strate_test );
-	bool StopPlugin( plugin_test_2* strate_test );
-	bool UninitializeExt( plugin_test_2* strate_test );
+	bool InitializeExt();
+	bool StartPlugin();
+	bool IsPluginRun();
+	bool StopPlugin();
+	bool UninitializeExt();
 	bool Uninitialize();
 	bool AssignTask( int32_t task_id, int32_t identity, int32_t code, std::string& data );
+
+public:
+	std::string m_location;
+	std::string m_cfg_file_path;
+	std::string m_info_file_path;
 
 private:
 	std::string m_log_cate;
@@ -54,4 +57,4 @@ private:
 
 };
 
-#endif // PLUGIN_TEST_2_PLUGIN_TEST_2_P_H
+#endif // PLUGIN_TEST_1_PLUGIN_TEST_1_P_H

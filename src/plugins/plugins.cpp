@@ -518,6 +518,30 @@ namespace basicx {
 		}
 	}
 
+	std::string Plugins_P::GetPluginLocationByName( const std::string& plugin_name ) {
+		PluginInfo* plugin_info = FindPluginInfoByName( plugin_name );
+		if( plugin_info != nullptr ) {
+			return plugin_info->GetLocation();
+		}
+		return "";
+	}
+
+	std::string Plugins_P::GetPluginCfgFilePathByName( const std::string& plugin_name ) {
+		PluginInfo* plugin_info = FindPluginInfoByName( plugin_name );
+		if( plugin_info != nullptr ) {
+			return plugin_info->GetCfgFilePath();
+		}
+		return "";
+	}
+
+	std::string Plugins_P::GetPluginInfoFilePathByName( const std::string& plugin_name ) {
+		PluginInfo* plugin_info = FindPluginInfoByName( plugin_name );
+		if( plugin_info != nullptr ) {
+			return plugin_info->GetInfoFilePath();
+		}
+		return "";
+	}
+
 	//void Plugins_P::AddUserTaskSend( int32_t task_type, std::string& task_info, std::string& task_data/* = string( "" )*/ ) {
 	//	if( "" == task_data ) { // 无附带数据
 	//		m_plugins_p->m_mission->RecvTaskMsg( task_type, task_info );
@@ -585,6 +609,18 @@ namespace basicx {
 
 	void Plugins::SetPluginsX( const std::string& plugin_name, Plugins_X* plugins_x ) {
 		m_plugins_p->SetPluginsX( plugin_name, plugins_x );
+	}
+
+	std::string Plugins::GetPluginLocationByName( const std::string& plugin_name ) const {
+		return m_plugins_p->GetPluginLocationByName( plugin_name );
+	}
+
+	std::string Plugins::GetPluginCfgFilePathByName( const std::string& plugin_name ) const {
+		return m_plugins_p->GetPluginCfgFilePathByName( plugin_name );
+	}
+
+	std::string Plugins::GetPluginInfoFilePathByName( const std::string& plugin_name ) const {
+		return m_plugins_p->GetPluginInfoFilePathByName( plugin_name );
 	}
 
 } // namespace basicx

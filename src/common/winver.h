@@ -31,6 +31,8 @@
 #include <windows.h>
 #endif
 
+#pragma warning(disable: 4996) // GetVersionExW was declared deprecated
+
 namespace basicx {
 
 #ifdef __OS_WINDOWS__
