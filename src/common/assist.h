@@ -58,6 +58,20 @@ namespace basicx {
 		return output_price;
 	}
 
+	inline std::string StringLeftTrim( const std::string& source, const std::string& drop ) {
+		std::string result( source );
+		return result.erase( 0, result.find_first_not_of( drop ) );
+	}
+
+	inline std::string StringRightTrim( const std::string& source, const std::string& drop ) {
+		std::string result( source );
+		return result.erase( result.find_last_not_of( drop ) + 1 );
+	}
+
+	inline std::string StringTrim( const std::string& source, const std::string& drop ) {
+		return StringLeftTrim( StringRightTrim( source, drop ), drop );
+	}
+
 	inline void StringReplace( std::string& str_str, const std::string& str_src, const std::string& str_dst ) {
 		std::string::size_type pos = 0;
 		std::string::size_type src_len = str_src.size();
@@ -67,6 +81,56 @@ namespace basicx {
 			pos += dst_len;
 		}
 	}
+
+#ifdef __OS_WINDOWS__
+	inline void GB2312toUTF8( const char* source, std::string& result ) {
+		int32_t unicode_length = MultiByteToWideChar( CP_ACP, 0, source, -1, NULL, 0 );
+		wchar_t* temp_unicode = new wchar_t[unicode_length + 1];
+		memset( temp_unicode, 0, unicode_length * 2 + 2 );
+		MultiByteToWideChar( CP_ACP, 0, source, -1, temp_unicode, unicode_length ); // GB2312 to Unicode
+		int32_t utf8_length = WideCharToMultiByte( CP_UTF8, 0, temp_unicode, -1, NULL, 0, NULL, NULL );
+		char* temp_utf8 = new char[utf8_length + 1];
+		memset( temp_utf8, 0, utf8_length + 1 );
+		WideCharToMultiByte( CP_UTF8, 0, temp_unicode, -1, temp_utf8, utf8_length, NULL, NULL ); // Unicode to UTF8
+		result = temp_utf8;
+		delete[] temp_utf8;
+		delete[] temp_unicode;
+	}
+
+	inline void UTF8toGB2312( const char* source, std::string& result ) {
+		int32_t unicode_length = MultiByteToWideChar( CP_UTF8, 0, source, -1, NULL, 0 );
+		wchar_t* temp_unicode = new wchar_t[unicode_length + 1];
+		memset( temp_unicode, 0, unicode_length * 2 + 2 );
+		MultiByteToWideChar( CP_UTF8, 0, source, -1, temp_unicode, unicode_length ); // UTF8 to Unicode
+		int32_t gb2312_length = WideCharToMultiByte( CP_ACP, 0, temp_unicode, -1, NULL, 0, NULL, NULL );
+		char* temp_gb2312 = new char[gb2312_length + 1];
+		memset( temp_gb2312, 0, gb2312_length + 1 );
+		WideCharToMultiByte( CP_ACP, 0, temp_unicode, -1, temp_gb2312, gb2312_length, NULL, NULL ); // Unicode to GB2312
+		result = temp_gb2312;
+		delete[] temp_gb2312;
+		delete[] temp_unicode;
+	}
+
+	inline std::string StringToUTF8( const std::string& source ) {
+		std::string result = "";
+		GB2312toUTF8( source.c_str(), result );
+		return result;
+	}
+
+	inline std::string StringToGB2312( const std::string& source ) {
+		std::string result = "";
+		UTF8toGB2312( source.c_str(), result );
+		return result;
+	}
+
+	inline std::string StringToUTF8( const char* source ) {
+		return StringToUTF8( std::string( source ) );
+	}
+
+	inline std::string StringToGB2312( const char* source ) {
+		return StringToGB2312( std::string( source ) );
+	}
+#endif
 
 	inline int64_t GetPerformanceFrequency() {
 #ifdef __OS_WINDOWS__
