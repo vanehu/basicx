@@ -23,6 +23,7 @@
 #ifndef BASICX_COMMON_ASSIST_H
 #define BASICX_COMMON_ASSIST_H
 
+#include <ctime>
 #include <tchar.h>
 #include <stdint.h> // int32_t, int64_t
 #include <iostream>
