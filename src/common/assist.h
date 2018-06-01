@@ -35,6 +35,14 @@
 
 namespace basicx {
 
+	inline tm GetNowTime() {
+		tm now_time;
+		time_t now_time_t;
+		time( &now_time_t );
+		localtime_s( &now_time, &now_time_t );
+		return now_time;
+	}
+
 	inline double Round( const double value, const size_t places ) {
 		double result = 0.0;
 		double module = value >= 0.0 ? 0.0000001 : -0.0000001;
