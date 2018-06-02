@@ -121,7 +121,7 @@ namespace basicx {
 				m_recv_buf_head = nullptr;
 			}
 			if( m_recv_buf_data != nullptr ) {
-				delete [] m_recv_buf_data;
+				delete[] m_recv_buf_data;
 				m_recv_buf_data = nullptr;
 			}
 		}

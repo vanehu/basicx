@@ -23,6 +23,7 @@
 #include <iostream>
 #include <algorithm>
 
+#include <common/assist.h>
 #include <common/Format/Format.hpp>
 #include <common/PugiXml/pugixml.hpp>
 
@@ -582,12 +583,9 @@ namespace basicx {
 		}
 
 #ifdef __OS_WINDOWS__
-		int32_t number = MultiByteToWideChar( 0, 0, library_name.c_str(), -1, NULL, 0 );
-		wchar_t* temp_library_name = new wchar_t[number];
-		MultiByteToWideChar( 0, 0, library_name.c_str(), -1, temp_library_name, number );
-		m_instance = LoadLibrary( std::wstring( temp_library_name ).c_str() );
-		delete[] temp_library_name;
+		m_instance = LoadLibrary( StringToWideChar( library_name ).c_str() );
 #endif
+		
 		if( nullptr == m_instance ) {
 			FormatLibrary::StandardLibrary::FormatTo( log_info, "插件 {0}({1}) 导入插件类库失败，实例句柄为空！路径：{2}", m_name, m_version, library_name );
 			AddErrorInfo( log_info );

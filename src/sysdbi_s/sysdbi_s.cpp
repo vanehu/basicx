@@ -21,6 +21,7 @@
 */
 
 #include <common/sysdef.h>
+#include <common/assist.h>
 #include <common/Format/Format.hpp>
 
 #ifdef __OS_WINDOWS__
@@ -73,13 +74,7 @@ namespace basicx {
 			}
 		}
 		catch( _com_error error ) {
-			std::wstring w_error_info( (LPCTSTR)error.Description() );
-			int32_t number_error_info = WideCharToMultiByte( CP_OEMCP, NULL, w_error_info.c_str(), -1, NULL, 0, NULL, FALSE );
-			char* temp_error_info = new char[number_error_info];
-			WideCharToMultiByte( CP_OEMCP, NULL, w_error_info.c_str(), -1, temp_error_info, number_error_info, NULL, FALSE );
-			std::string error_info = std::string( temp_error_info );
-			delete[] temp_error_info;
-			FormatLibrary::StandardLibrary::FormatTo( log_info, "打开数据库连接实例 {0} 时发生错误: {1}！\r\n", result, error_info );
+			FormatLibrary::StandardLibrary::FormatTo( log_info, "打开数据库连接实例 {0} 时发生错误: {1}！\r\n", result, StringToAnsiChar( error.Description() ) );
 			m_syslog->LogWrite( syslog_level::c_error, m_log_cate, log_info );
 			return result = E_FAIL;
 		}
@@ -112,13 +107,7 @@ namespace basicx {
 			recordset->Open( _bstr_t( query.c_str() ), _variant_t( (IDispatch*)connection, true ), ADODB::adOpenKeyset, ADODB::adLockOptimistic, ADODB::adCmdText );
 		}
 		catch( _com_error error ) {
-			std::wstring w_error_info( (LPCTSTR)error.Description() );
-			int32_t number_error_info = WideCharToMultiByte( CP_OEMCP, NULL, w_error_info.c_str(), -1, NULL, 0, NULL, FALSE );
-			char* temp_error_info = new char[number_error_info];
-			WideCharToMultiByte( CP_OEMCP, NULL, w_error_info.c_str(), -1, temp_error_info, number_error_info, NULL, FALSE );
-			std::string error_info = std::string( temp_error_info );
-			delete[] temp_error_info;
-			FormatLibrary::StandardLibrary::FormatTo( log_info, "数据信息查询失败! 错误: {0}！语句：{1}", error_info, query );
+			FormatLibrary::StandardLibrary::FormatTo( log_info, "数据信息查询失败! 错误: {0}！语句：{1}", StringToAnsiChar( error.Description() ), query );
 			m_syslog->LogWrite( syslog_level::c_error, m_log_cate, log_info );
 			return false;
 		}

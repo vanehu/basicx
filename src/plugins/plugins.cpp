@@ -23,6 +23,7 @@
 #include <iostream>
 
 #include <common/sysdef.h>
+#include <common/assist.h>
 #include <common/Format/Format.hpp>
 
 #include "plugins_.h"
@@ -110,20 +111,12 @@ namespace basicx {
 		int32_t number = 0;
 		WIN32_FIND_DATA find_data;
 		ZeroMemory( &find_data, sizeof( WIN32_FIND_DATA ) );
-		number = MultiByteToWideChar( 0, 0, folder_path.c_str(), -1, NULL, 0 );
-		wchar_t* temp_folder_path = new wchar_t[number];
-		MultiByteToWideChar( 0, 0, folder_path.c_str(), -1, temp_folder_path, number );
-		std::wstring search_file = std::wstring( temp_folder_path ) + L"\\*.*";
-		delete[] temp_folder_path;
+		std::wstring search_file = StringToWideChar( folder_path ) + L"\\*.*";
 		void* find_file = FindFirstFile( search_file.c_str(), &find_data );
 		if( find_file != INVALID_HANDLE_VALUE ) {
 			bool is_finish = FindNextFile( find_file, &find_data ) ? false : true;
 			while( !is_finish ) {
-				number = WideCharToMultiByte( CP_OEMCP, NULL, find_data.cFileName, -1, NULL, 0, NULL, FALSE );
-				char* temp_file_name = new char[number];
-				WideCharToMultiByte( CP_OEMCP, NULL, find_data.cFileName, -1, temp_file_name, number, NULL, FALSE );
-				std::string file_name = std::string( temp_file_name );
-				delete[] temp_file_name;
+				std::string file_name = StringToAnsiChar( find_data.cFileName );
 				if( file_name != "." && file_name != ".." ) {
 					if( find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) { // всд©б╪
 						FindPluginPaths( folder_path + "\\" + file_name );

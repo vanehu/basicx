@@ -26,6 +26,7 @@
 #include <iostream>
 
 #include <common/sysdef.h>
+#include <common/assist.h>
 #include <common/Format/Format.hpp>
 
 #ifdef __OS_WINDOWS__
@@ -389,16 +390,8 @@ namespace basicx {
 		DWORD size_computer_name = 64;
 		GetUserName( account_name, &size_account_name ); // 需要 Advapi32.lib
 		GetComputerName( computer_name, &size_computer_name );
-		int32_t account_number = WideCharToMultiByte( CP_OEMCP, NULL, account_name, -1, NULL, 0, NULL, FALSE );
-		int32_t computer_number = WideCharToMultiByte( CP_OEMCP, NULL, computer_name, -1, NULL, 0, NULL, FALSE );
-		char* account_temp = new char[account_number];
-		char* computer_temp = new char[computer_number];
-		WideCharToMultiByte( CP_OEMCP, NULL, account_name, -1, account_temp, account_number, NULL, FALSE );
-		WideCharToMultiByte( CP_OEMCP, NULL, computer_name, -1, computer_temp, computer_number, NULL, FALSE );
-		m_account_name = std::string( account_temp );
-		m_computer_name = std::string( computer_temp );
-		delete[] account_temp;
-		delete[] computer_temp;
+		m_account_name = StringToAnsiChar( account_name );
+		m_computer_name = StringToAnsiChar( computer_name );
 
 		wchar_t char_path[MAX_PATH] = { 0 };
 		GetModuleFileName( NULL, char_path, MAX_PATH );
@@ -414,11 +407,7 @@ namespace basicx {
 			CreateDirectory( string_path.c_str(), NULL );
 		}
 
-		int32_t path_number = WideCharToMultiByte( CP_OEMCP, NULL, string_path.c_str(), -1, NULL, 0, NULL, FALSE );
-		char* path_temp = new char[path_number];
-		WideCharToMultiByte( CP_OEMCP, NULL, string_path.c_str(), -1, path_temp, path_number, NULL, FALSE );
-		m_log_folder = std::string( path_temp ); // 不能直接赋值，不然 delete 后 m_log_folder 会有问题
-		delete[] path_temp;
+		m_log_folder = StringToAnsiChar( string_path );
 #endif
 
 		//#include <boost/filesystem.hpp>

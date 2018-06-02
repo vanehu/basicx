@@ -22,6 +22,7 @@
 #include <ctime>
 
 #include <common/sysdef.h>
+#include <common/assist.h>
 #include <common/PugiXml/pugixml.hpp>
 
 #ifdef __OS_WINDOWS__
@@ -71,35 +72,24 @@ namespace basicx {
 #ifdef __OS_WINDOWS__
 		wchar_t char_path[MAX_PATH] = { 0 };
 		GetModuleFileName( NULL, char_path, MAX_PATH );
-		std::wstring string_path( char_path );
-		int32_t path_number = WideCharToMultiByte( CP_OEMCP, NULL, string_path.c_str(), -1, NULL, 0, NULL, FALSE );
-		char* path_temp = new char[path_number];
-		WideCharToMultiByte( CP_OEMCP, NULL, string_path.c_str(), -1, path_temp, path_number, NULL, FALSE );
-		std::string app_exec_path = std::string( path_temp );
-		delete[] path_temp;
+		std::string app_exec_path = StringToAnsiChar( char_path );
 #endif
 
 		size_t slash_index = app_exec_path.rfind( '\\' );
 		m_syscfg_p->m_name_app_full = app_exec_path.substr( slash_index + 1 );
 		m_syscfg_p->m_path_app_exec = app_exec_path;
 		m_syscfg_p->m_path_app_folder = app_exec_path.substr( 0, slash_index );
-		m_syscfg_p->m_path_cfg_folder = m_syscfg_p->m_path_app_folder + "\\ConfigX";
-		m_syscfg_p->m_path_plu_folder = m_syscfg_p->m_path_app_folder + "\\PluginX";
-		m_syscfg_p->m_path_ext_folder = m_syscfg_p->m_path_app_folder + "\\ExtDlls";
-		m_syscfg_p->m_path_cfg_basic = m_syscfg_p->m_path_app_folder + "\\ConfigX\\" + basic_file;
+		m_syscfg_p->m_path_cfg_folder = m_syscfg_p->m_path_app_folder + "\\configs";
+		m_syscfg_p->m_path_plu_folder = m_syscfg_p->m_path_app_folder + "\\plugins";
+		m_syscfg_p->m_path_ext_folder = m_syscfg_p->m_path_app_folder + "\\extdlls";
+		m_syscfg_p->m_path_cfg_basic = m_syscfg_p->m_path_app_folder + "\\configs\\" + basic_file;
 
 #ifdef __OS_WINDOWS__
-		int32_t envs_number = MultiByteToWideChar( 0, 0, m_syscfg_p->m_path_ext_folder.c_str(), -1, NULL, 0 );
-		wchar_t* temp_env_paths = new wchar_t[envs_number];
-		MultiByteToWideChar( 0, 0, m_syscfg_p->m_path_ext_folder.c_str(), -1, temp_env_paths, envs_number );
-		std::wstring path_ext_folder = std::wstring( temp_env_paths );
-		delete[] temp_env_paths;
-
 		wchar_t env_buf[2048] = { 0 };
 		unsigned long size = GetEnvironmentVariable( L"path", env_buf, 2048 );
 		std::wstring env_paths = std::wstring( env_buf );
 		env_paths.append( L";" );
-		env_paths.append( path_ext_folder );
+		env_paths.append( StringToWideChar( m_syscfg_p->m_path_ext_folder ) );
 		env_paths.append( L";" );
 		bool result = SetEnvironmentVariable( L"path", env_paths.c_str() );
 #endif

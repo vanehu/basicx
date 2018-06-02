@@ -57,7 +57,7 @@ namespace basicx {
 		m_net_server_broad->StartNetwork( net_server_cfg );
 
 		for( size_t i = 0; i < cfg_basic->m_vec_server_server.size(); i++ ) {
-			if( "SystemRTM" == cfg_basic->m_vec_server_server[i].m_type && 1 == cfg_basic->m_vec_server_server[i].m_work ) {
+			if( "system_rtm" == cfg_basic->m_vec_server_server[i].m_type && 1 == cfg_basic->m_vec_server_server[i].m_work ) {
 				m_net_server_broad->Server_AddListen( "0.0.0.0", cfg_basic->m_vec_server_server[i].m_port, cfg_basic->m_vec_server_server[i].m_type ); // 0.0.0.0
 			}
 		}
