@@ -23,6 +23,7 @@
 #define BASICX_COMMON_ASSIST_H
 
 #include <ctime>
+#include <string>
 #include <tchar.h>
 #include <stdint.h> // int32_t, int64_t
 #include <iostream>
@@ -32,6 +33,13 @@
 #ifdef __OS_WINDOWS__
 #include <windows.h>
 #endif
+
+#ifdef __GNUC__
+#include <endian.h>
+#endif
+
+// typedef uint16_t char16_t;
+// typedef std::basic_string<char16_t>
 
 namespace basicx {
 
@@ -183,6 +191,207 @@ namespace basicx {
 	inline std::string StringToGB2312( const char* source ) {
 		return StringToGB2312( std::string( source ) );
 	}
+
+	// 以下 UTF16 和 UTF8 的相互转换都是在小端序下进行
+
+	static inline uint16_t byteswap_ushort( uint16_t number ) {
+#if defined(_MSC_VER) && _MSC_VER > 1310
+		return _byteswap_ushort( number );
+#elif defined(__GNUC__)
+		return __builtin_bswap16( number );
+#else
+		return ( number >> 8 ) | ( number << 8 );
+#endif
+	}
+
+	inline std::string UTF16_To_UTF8( const std::u16string& u16str ) { // 需要带 BOM 标记
+		if( u16str.empty() ) {
+			return std::string();
+		}
+		char16_t bom = u16str[0];
+		switch( bom ) {
+		case 0xFEFF: // 小端序
+			return UTF16LE_To_UTF8( u16str );
+			break;
+		case 0xFFFE: // 大端序
+			return UTF16BE_To_UTF8( u16str );
+			break;
+		default:
+			return std::string();
+		}
+	}
+
+	inline std::string UTF16LE_To_UTF8( const std::u16string& u16str ) {
+		if( u16str.empty() ) {
+			return std::string();
+		}
+		const char16_t* data = u16str.data();
+		std::u16string::size_type len = u16str.length();
+		if( data[0] == 0xFEFF ) { // 带有 bom 标记
+			data += 1; // 后移
+			len -= 1;
+		}
+		std::string u8str;
+		u8str.reserve( len * 2 );
+		char16_t u16char;
+		for( std::u16string::size_type i = 0; i < len; ++i ) { // 这里假设是在小端序下，大端序不适用
+			u16char = data[i];
+			if( u16char < 0x0080 ) { // 1 字节表示部分 // u16char <= 0x007F
+									 // U-00000000 - U-000007FF : 0xxxxxxx
+				u8str.push_back( (char)( u16char & 0x00FF ) ); // 取低 8 bit
+				continue;
+			}
+			if( u16char >= 0x0080 && u16char <= 0x07FF ) { // 2 字节表示部分
+														   // U-00000080 - U-000007FF : 110xxxxx 10xxxxxx
+				u8str.push_back( (char)( ( ( u16char >> 6 ) & 0x1F ) | 0xC0 ) );
+				u8str.push_back( (char)( ( u16char & 0x3F ) | 0x80 ) );
+				continue;
+			}
+			if( u16char >= 0xD800 && u16char <= 0xDBFF ) { // 4 字节表示部分
+														   // U-00010000 - U-001FFFFF : 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+				uint32_t high_sur = u16char;
+				uint32_t low_sur = data[++i];
+				// 从代理项对到 UNICODE 代码点转换
+				uint32_t code_point = high_sur - 0xD800; // 1、从高代理项减去 0xD800 获取有效 10 bit
+				code_point <<= 10;
+				code_point |= low_sur - 0xDC00; // 2、从低代理项减去 0xDC00 获取有效 10 bit
+				code_point += 0x10000; // 3、加上 0x10000 获取 UNICODE 代码点值
+									   // 转为 4 字节 UTF8 编码表示
+				u8str.push_back( (char)( ( code_point >> 18 ) | 0xF0 ) );
+				u8str.push_back( (char)( ( ( code_point >> 12 ) & 0x3F ) | 0x80 ) );
+				u8str.push_back( (char)( ( ( code_point >> 06 ) & 0x3F ) | 0x80 ) );
+				u8str.push_back( (char)( ( code_point & 0x3F ) | 0x80 ) );
+				continue;
+			}
+			{ // 3 字节表示部分
+			  // U-0000E000 - U-0000FFFF : 1110xxxx 10xxxxxx 10xxxxxx
+				u8str.push_back( (char)( ( ( u16char >> 12 ) & 0x0F ) | 0xE0 ) );
+				u8str.push_back( (char)( ( ( u16char >> 6 ) & 0x3F ) | 0x80 ) );
+				u8str.push_back( (char)( ( u16char & 0x3F ) | 0x80 ) );
+				continue;
+			}
+		}
+		return u8str;
+	}
+
+	inline std::string UTF16BE_To_UTF8( const std::u16string& u16str ) {
+		if( u16str.empty() ) {
+			return std::string();
+		}
+		const char16_t* data = u16str.data();
+		std::u16string::size_type len = u16str.length();
+		if( data[0] == 0xFFFE ) { // 带有 bom 标记
+			data += 1; // 后移
+			len -= 1;
+		}
+		std::string u8str;
+		u8str.reserve( len * 2 );
+		char16_t u16char;
+		for( std::u16string::size_type i = 0; i < len; ++i ) { // 这里假设是在小端序下，大端序不适用
+			u16char = data[i];
+			u16char = byteswap_ushort( u16char ); // 将大端序转为小端序
+			if( u16char < 0x0080 ) { // 1 字节表示部分 // u16char <= 0x007F
+									 // U-00000000 - U-000007FF : 0xxxxxxx
+				u8str.push_back( (char)( u16char & 0x00FF ) ); // 取低 8 bit
+				continue;
+			}
+			if( u16char >= 0x0080 && u16char <= 0x07FF ) { // 2 字节表示部分
+														   // U-00000080 - U-000007FF : 110xxxxx 10xxxxxx
+				u8str.push_back( (char)( ( ( u16char >> 6 ) & 0x1F ) | 0xC0 ) );
+				u8str.push_back( (char)( ( u16char & 0x3F ) | 0x80 ) );
+				continue;
+			}
+			if( u16char >= 0xD800 && u16char <= 0xDBFF ) { // 4 字节表示部分
+														   // U-00010000 - U-001FFFFF : 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+				uint32_t high_sur = u16char;
+				uint32_t low_sur = byteswap_ushort( data[++i] );
+				// 从代理项对到 UNICODE 代码点转换
+				uint32_t code_point = high_sur - 0xD800; // 1、从高代理项减去 0xD800 获取有效 10 bit
+				code_point <<= 10;
+				code_point |= low_sur - 0xDC00; // 2、从低代理项减去 0xDC00 获取有效 10 bit
+				code_point += 0x10000; // 3、加上 0x10000 获取 UNICODE 代码点值
+									   // 转为 4 字节 UTF8 编码表示
+				u8str.push_back( (char)( ( code_point >> 18 ) | 0xF0 ) );
+				u8str.push_back( (char)( ( ( code_point >> 12 ) & 0x3F ) | 0x80 ) );
+				u8str.push_back( (char)( ( ( code_point >> 06 ) & 0x3F ) | 0x80 ) );
+				u8str.push_back( (char)( ( code_point & 0x3F ) | 0x80 ) );
+				continue;
+			}
+			{ // 3 字节表示部分
+			  // U-0000E000 - U-0000FFFF : 1110xxxx 10xxxxxx 10xxxxxx
+				u8str.push_back( (char)( ( ( u16char >> 12 ) & 0x0F ) | 0xE0 ) );
+				u8str.push_back( (char)( ( ( u16char >> 6 ) & 0x3F ) | 0x80 ) );
+				u8str.push_back( (char)( ( u16char & 0x3F ) | 0x80 ) );
+				continue;
+			}
+		}
+		return u8str;
+	}
+
+	inline std::u16string UTF8_To_UTF16LE( const std::string& u8str, bool add_bom ) {
+		std::u16string u16str;
+		u16str.reserve( u8str.size() );
+		std::string::size_type len = u8str.length();
+		if( add_bom ) {
+			u16str.push_back( 0xFEFF ); // 添加 bom 标记
+		}
+		const unsigned char* data = (unsigned char*)( u8str.data() );
+		if( len > 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF ) { // 判断是否具有 bom 即判断长度小于 3 字节的情况
+			data += 3;
+			len -= 3;
+		}
+		for( std::string::size_type i = 0; i < len; ++i ) {
+			uint32_t c1 = data[i]; // 取出 UTF8 序列首字节
+			if( 0 == ( c1 & 0x80 ) ) { // 最高位为 0 只有 1 字节表示 UNICODE 代码点
+				u16str.push_back( (char16_t)c1 );
+				continue;
+			}
+			switch( c1 & 0xF0 ) {
+			case 0xF0: { // 4 字节字符 0x10000 到 0x10FFFF
+				uint32_t c2 = data[++i];
+				uint32_t c3 = data[++i];
+				uint32_t c4 = data[++i];
+				uint32_t code_point = ( ( c1 & 0x07U ) << 18 ) | ( ( c2 & 0x3FU ) << 12 ) | ( ( c3 & 0x3FU ) << 6 ) | ( c4 & 0x3FU ); // 计算 UNICODE 代码点值，第一个字节取低 3 bit 其余取 6 bit
+				if( code_point >= 0x10000 ) { // 在UTF-16 中 U+10000 到 U+10FFFF 用两个 16 bit 单元表示代理项对
+					code_point -= 0x10000; // 1、将代码点减去 0x10000 得到长度为 20 bit 的值
+					u16str.push_back( (char16_t)( ( code_point >> 10 ) | 0xD800U ) ); // 2、高代理项 是将那 20 bit 中的高 10 bit 加上 0xD800(11011000 00000000)
+					u16str.push_back( (char16_t)( ( code_point & 0x03FFU ) | 0xDC00U ) ); // 3、低代理项 是将那 20 bit 中的低 10 bit 加上 0xDC00(11011100 00000000)
+				}
+				else { // 在 UTF-16 中 U+0000 到 U+D7FF 以及 U+E000 到 U+FFFF 与 UNICODE 代码点值相同，U+D800 到 U+DFFF 是无效字符这里假设不存在如果存在则不做编码
+					u16str.push_back( (char16_t)code_point );
+				}
+				break;
+			}
+			case 0xE0: { // 3 字节字符 0x800 到 0xFFFF
+				uint32_t c2 = data[++i];
+				uint32_t c3 = data[++i];
+				uint32_t code_point = ( ( c1 & 0x0FU ) << 12 ) | ( ( c2 & 0x3FU ) << 6 ) | ( c3 & 0x3FU ); // 计算 UNICODE 代码点值，第一个字节取低 4 bit 其余取 6 bit
+				u16str.push_back( (char16_t)code_point );
+				break;
+			}
+			case 0xD0:
+			case 0xC0: { // 2 字节字符 0x80 到 0x7FF
+				uint32_t c2 = data[++i];
+				uint32_t code_point = ( ( c1 & 0x1FU ) << 12 ) | ( ( c2 & 0x3FU ) << 6 ); // 计算 UNICODE 代码点值，第一个字节取低 5 bit 其余取 6 bit
+				u16str.push_back( (char16_t)code_point );
+				break;
+			}
+			default: // 单字节部分，前面已经处理
+				break;
+			}
+		}
+		return u16str;
+	}
+
+	inline std::u16string UTF8_To_UTF16BE( const std::string& u8str, bool add_bom ) {
+		std::u16string u16str = UTF8_To_UTF16LE( u8str, add_bom ); // 先获取 UTF-16 LE 编码字符串
+		for( size_t i = 0; i < u16str.size(); ++i ) {
+			u16str[i] = byteswap_ushort( u16str[i] ); // 将小端序转换为大端序
+		}
+		return u16str;
+	}
+
+	// 以上 UTF16 和 UTF8 的相互转换都是在小端序下进行
 
 	inline int64_t GetPerformanceFrequency() {
 #ifdef __OS_WINDOWS__
