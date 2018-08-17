@@ -24,6 +24,7 @@
 
 #include <iostream>
 
+#include "md5.h"
 #include "common.h"
 
 namespace basicx {
@@ -56,6 +57,36 @@ namespace basicx {
 			}
 		}
 		std::cout << "插件参数配置信息读取完成。" << std::endl << std::endl;
+
+		std::cout << MD5( "abc" ).ToString() << std::endl;
+		std::ifstream file_txt = std::ifstream( "..//etc//test_md5.txt" );
+		std::cout << MD5( file_txt ).ToString() << std::endl;
+		std::ifstream file_exe = std::ifstream( "..//etc//test_md5.exe", std::ios::binary );
+		std::cout << MD5( file_exe ).ToString() << std::endl;
+
+		MD5 md5;
+
+		std::cout << md5.FileDigest( "..//etc//test_md5.exe" ) << std::endl;
+
+		md5.Update( "" );
+		md5.PrintMD5( "", md5 );
+
+		md5.Update( "a" );
+		md5.PrintMD5( "a", md5 );
+
+		md5.Update( "bc" );
+		md5.PrintMD5( "abc", md5 );
+
+		md5.Update( "defghijklmnopqrstuvwxyz" );
+		md5.PrintMD5( "abcdefghijklmnopqrstuvwxyz", md5 );
+
+		md5.Reset();
+		md5.Update( "message digest" );
+		md5.PrintMD5( "message digest", md5 );
+
+		md5.Reset();
+		md5.Update( std::ifstream( "..//etc//test_md5.txt" ) );
+		md5.PrintMD5( "..//etc//test_md5.txt", md5 );
 	}
 
 } // namespace basicx

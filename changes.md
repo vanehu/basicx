@@ -1,4 +1,8 @@
 
+2018-08-09 0.5.4:
+ - add md5 compute function in common
+ - add asio_client and sock_client in network
+
 2018-06-01 0.5.3:
  - add functions relating to string in common.assist.h
 

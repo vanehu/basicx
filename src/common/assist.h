@@ -38,10 +38,10 @@
 #include <endian.h>
 #endif
 
-// typedef uint16_t char16_t;
-// typedef std::basic_string<char16_t>
-
 namespace basicx {
+
+	// typedef uint16_t char16_t;
+	// typedef std::basic_string<char16_t>
 
 	inline tm GetNowTime() {
 		tm now_time;
@@ -204,23 +204,6 @@ namespace basicx {
 #endif
 	}
 
-	inline std::string UTF16_To_UTF8( const std::u16string& u16str ) { // 需要带 BOM 标记
-		if( u16str.empty() ) {
-			return std::string();
-		}
-		char16_t bom = u16str[0];
-		switch( bom ) {
-		case 0xFEFF: // 小端序
-			return UTF16LE_To_UTF8( u16str );
-			break;
-		case 0xFFFE: // 大端序
-			return UTF16BE_To_UTF8( u16str );
-			break;
-		default:
-			return std::string();
-		}
-	}
-
 	inline std::string UTF16LE_To_UTF8( const std::u16string& u16str ) {
 		if( u16str.empty() ) {
 			return std::string();
@@ -326,6 +309,23 @@ namespace basicx {
 			}
 		}
 		return u8str;
+	}
+
+	inline std::string UTF16_To_UTF8( const std::u16string& u16str ) { // 需要带 BOM 标记
+		if( u16str.empty() ) {
+			return std::string();
+		}
+		char16_t bom = u16str[0];
+		switch( bom ) {
+		case 0xFEFF: // 小端序
+			return UTF16LE_To_UTF8( u16str );
+			break;
+		case 0xFFFE: // 大端序
+			return UTF16BE_To_UTF8( u16str );
+			break;
+		default:
+			return std::string();
+		}
 	}
 
 	inline std::u16string UTF8_To_UTF16LE( const std::string& u8str, bool add_bom ) {
