@@ -22,6 +22,7 @@
 #include <ctime>
 #include <chrono>
 #include <thread>
+#include <share.h> // _fsopen
 #include <iostream>
 
 #include <common/sysdef.h>
@@ -226,7 +227,8 @@ namespace basicx {
 				fclose( m_log_file );
 				m_log_file = nullptr;
 			}
-			fopen_s( &m_log_file, m_log_path.c_str(), "wb" );
+			//fopen_s( &m_log_file, m_log_path.c_str(), "wb" );
+			m_log_file = _fsopen( m_log_path.c_str(), "wb", _SH_DENYNO );
 			if( true == m_fs_buffer_user ) {
 				setvbuf( m_log_file, nullptr, m_fs_buffer_mode, m_fs_buffer_size );
 			}
@@ -437,7 +439,8 @@ namespace basicx {
 				cacher->m_log_name = m_log_name;
 				FormatLibrary::StandardLibrary::FormatTo( cacher->m_log_path, "{0}\\{1}_{2}_{3}.log", m_log_folder, m_log_name, i + 1, now_file_buf ); // cacher_id
 				cacher->m_log_folder = m_log_folder;
-				fopen_s( &cacher->m_log_file, cacher->m_log_path.c_str(), "wb" );
+				//fopen_s( &cacher->m_log_file, cacher->m_log_path.c_str(), "wb" );
+				cacher->m_log_file = _fsopen( cacher->m_log_path.c_str(), "wb", _SH_DENYNO );
 				if( true == m_fs_buffer_user ) {
 					setvbuf( cacher->m_log_file, nullptr, m_fs_buffer_mode, m_fs_buffer_size );
 				}
@@ -447,7 +450,8 @@ namespace basicx {
 		}
 		else {
 			FormatLibrary::StandardLibrary::FormatTo( m_log_path, "{0}\\{1}_{2}.log", m_log_folder, m_log_name, now_file_buf );
-			fopen_s( &m_log_file, m_log_path.c_str(), "wb" );
+			//fopen_s( &m_log_file, m_log_path.c_str(), "wb" );
+			m_log_file = _fsopen( m_log_path.c_str(), "wb", _SH_DENYNO );
 			if( true == m_fs_buffer_user ) {
 				setvbuf( m_log_file, nullptr, m_fs_buffer_mode, m_fs_buffer_size );
 			}
@@ -591,7 +595,8 @@ namespace basicx {
 						fclose( m_log_file );
 						m_log_file = nullptr;
 					}
-					fopen_s( &m_log_file, m_log_path.c_str(), "wb" );
+					//fopen_s( &m_log_file, m_log_path.c_str(), "wb" );
+					m_log_file = _fsopen( m_log_path.c_str(), "wb", _SH_DENYNO );
 					if( true == m_fs_buffer_user ) {
 						setvbuf( m_log_file, nullptr, m_fs_buffer_mode, m_fs_buffer_size );
 					}

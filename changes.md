@@ -1,4 +1,7 @@
 
+2018-08-28 0.5.5:
+ - change syslog file open mode to _SH_DENYNO
+
 2018-08-09 0.5.4:
  - add md5 compute function in common
  - add asio_client and sock_client in network
