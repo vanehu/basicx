@@ -27,6 +27,8 @@
 #include <tchar.h>
 #include <stdint.h> // int32_t, int64_t
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 
 #include "sysdef.h"
 
@@ -51,7 +53,27 @@ namespace basicx {
 		return now_time;
 	}
 
-	inline double Round( const double value, const size_t places ) {
+	inline double Round_1( double number, size_t bits ) {
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision( bits ) << number;
+		ss >> number;
+		return number;
+	}
+
+	inline double Round_2( double number, size_t bits ) {
+		double integer_part = floor( number );
+		number -= integer_part;
+		for( size_t i = 0; i < bits; ++i ) {
+			number *= 10;
+		}
+		number = floor( number + 0.5 );
+		for( size_t i = 0; i < bits; ++i ) {
+			number /= 10;
+		}
+		return integer_part + number;
+	}
+
+	inline double Round_3( const double value, const size_t places ) {
 		double result = 0.0;
 		double module = value >= 0.0 ? 0.0000001 : -0.0000001;
 		result = value;
@@ -61,6 +83,13 @@ namespace basicx {
 		result /= pow( 10.0, places );
 		return result;
 	}
+
+	//double number = 3.1415926535827932;
+	//std::cout << std::fixed << std::showpoint << std::setprecision( 15 );
+	//std::cout << "number = " << number << std::endl;
+	//for( size_t i = 0; i < 15; ++i ) {
+	//	std::cout << "number 保留 " << i << " 位小数后为: " << basicx::Round_1( number, i ) << std::endl; // Round_1、Round_2、Round_3
+	//}
 
 	inline double NearPrice( const double input_price, const double min_price_unit, const size_t price_places ) {
 		int64_t price_temp = (int64_t)std::floor( input_price * std::pow( 10.0, price_places + 1 ) ); // 多保留一位，之后的截掉

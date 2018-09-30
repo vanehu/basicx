@@ -466,7 +466,7 @@ namespace basicx {
 		LogPrint( syslog_level::n_info, m_log_cate, log_info );
 		FormatLibrary::StandardLibrary::FormatTo( log_info, "System started on: {0}", m_start_time );
 		LogPrint( syslog_level::n_info, m_log_cate, log_info );
-		FormatLibrary::StandardLibrary::FormatTo( log_info, "Computer name: {0}.  Account name: {1}\n", m_computer_name, m_account_name );
+		FormatLibrary::StandardLibrary::FormatTo( log_info, "Computer name: {0}  Account name: {1}\n", m_computer_name, m_account_name );
 		LogPrint( syslog_level::n_info, m_log_cate, log_info );
 	}
 

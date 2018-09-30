@@ -24,7 +24,7 @@ CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
 
 SET_PROPERTY (GLOBAL PROPERTY USE_FOLDERS ON)
 
-OPTION (CMAKE_PLATFORM_X64 "platform x86 or x64." OFF) # 启用则 64 位，禁用则 32 位
+OPTION (CMAKE_PLATFORM_X64 "platform x86 or x64." ON) # 启用则 64 位，禁用则 32 位
 OPTION (CMAKE_LINKTYPE_SHARED "link type shared or static." ON) # 启用则动态链接，禁用则静态链接
 OPTION (CMAKE_COMPILE_RELEASE "compile release or debug." ON) # 启用则 release 版，禁用则 debug 版
 

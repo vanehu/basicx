@@ -26,7 +26,7 @@ namespace basicx {
 
 #define DEF_APP_NAME "BasicX" // 系统英文名称
 #define DEF_APP_NAME_CN "系 统 基 础 模 块" // 系统中文名称
-#define DEF_APP_VERSION "V0.5.5-Beta Build 20180828" // 系统版本号
+#define DEF_APP_VERSION "V0.5.5-Beta Build 20180930" // 系统版本号
 #define DEF_APP_DEVELOPER "Developed by the X-Lab." // 开发者声明
 #define DEF_APP_COMPANY "X-Lab (Shanghai) Co., Ltd." // 公司声明
 #define DEF_APP_COPYRIGHT "Copyright 2018-2018 X-Lab All Rights Reserved." // 版权声明
