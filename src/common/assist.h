@@ -53,14 +53,7 @@ namespace basicx {
 		return now_time;
 	}
 
-	inline double Round_1( double number, size_t bits ) {
-		std::stringstream ss;
-		ss << std::fixed << std::setprecision( bits ) << number;
-		ss >> number;
-		return number;
-	}
-
-	inline double Round_2( double number, size_t bits ) {
+	inline double Round_1( double number, const size_t bits ) { // 很快：i7-7500U 100亿次约11.53秒
 		double integer_part = floor( number );
 		number -= integer_part;
 		for( size_t i = 0; i < bits; ++i ) {
@@ -73,15 +66,22 @@ namespace basicx {
 		return integer_part + number;
 	}
 
-	inline double Round_3( const double value, const size_t places ) {
+	inline double Round_2( const double number, const size_t bits ) { // 很快：i7-7500U 100亿次约11.53秒
 		double result = 0.0;
-		double module = value >= 0.0 ? 0.0000001 : -0.0000001;
-		result = value;
-		result += 5.0 / pow( 10.0, places + 1.0 );
-		result *= pow( 10.0, places );
+		double module = number >= 0.0 ? 0.0000001 : -0.0000001;
+		result = number;
+		result += 5.0 / pow( 10.0, bits + 1.0 );
+		result *= pow( 10.0, bits );
 		result = floor( result + module );
-		result /= pow( 10.0, places );
+		result /= pow( 10.0, bits );
 		return result;
+	}
+
+	inline double Round_3( double number, const size_t bits ) { // 很慢：i7-7500U 1000万次约17秒
+		std::stringstream ss;
+		ss << std::fixed << std::setprecision( bits ) << number;
+		ss >> number;
+		return number;
 	}
 
 	//double number = 3.1415926535827932;
